@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>mylist</title>
+   
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Cairo:wght@200..1000&family=Lato&family=Montserrat:wght@500&family=Poppins:ital,wght@0,400;0,500;1,400&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  </head>
+
+
+  <style>
+    @media (min-width: 575px){
+        body{
+            display: none;
+
+        }
+    }
+
+    body{
+        background-color: #f5f5f5;
+    }
+  </style>
+
+  <!--  modal new note -->
+  <div class="modal fade" id="new-task-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modal-title">New Task</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">Task</label>
+            <input type="text" class="form-control" id="title-message">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="addTask()" style="background-color:  rgb(249, 162, 0); border-color:  rgb(249, 162, 0);">Add</button>
+      </div>
+    </div>
+  </div>
+</div>
+  <!-- //  modal new note // -->
+
+
+<body>
+    <div class="p-3" style="width: 100%; height: 100px;position:sticky;">
+        
+        <h1 style="direction: rtl; padding: 20px;">المهام</h1>
+    </div>
+    <div class="container back-notes" style="min-height:100vh; padding-bottom:20px;">
+
+       
+        
+
+
+            <!-- notes -->
+        <div class="wrapper" id="task-container" style="margin-bottom: 30px;display: flex; flex-direction: column-reverse;">
+            <div class="add-box" id="add-box" data-bs-toggle="modal" data-bs-target="#new-task-modal">
+                <div class="icon"><i class="fa-solid fa-plus"></i></div> 
+                <p>add new note</p>
+            </div>
+
+        </div>
+        <p class="d-inline-flex gap-1">
+            <div data-bs-toggle="collapse" data-bs-target="#doneTaskContainer" aria-expanded="false" aria-controls="doneTaskContainer" style="direction: rtl; padding:10px 30px; cursor: pointer; display: flex; justify-content: space-between;align-items: center;">
+                <div><i class="fa-solid fa-caret-down"></i> أكتمل <span id="complete-number"></span></div>
+                <i class="fa-solid fa-trash"  onclick="deleteToken()" style="position: relative; top: 10px; font-size: 20px;"></i>
+            </div>
+        </p>
+        <div class="collapse" id="doneTaskContainer">
+
+        </div>
+
+        
+    </div>
+    <div class="shadow footer" style="display: flex; justify-content: space-around; align-items: center; width: 100%; height: 80px; background-color: #f5f5f5;position: fixed; z-index: 9999;bottom:0px; border-top: 1px solid #fff;">
+      <div class="hover-footer" style="display: flex; flex-direction: column; align-items: center; font-size: 20px;width: 50%;cursor: pointer;position: relative;" onclick="toDoList()">
+        <i class="fa-regular fa-square-check"></i>
+        المهام
+      </div>
+      <div class="hover-footer" style="display: flex; flex-direction: column; align-items: center;font-size: 20px;width: 50%;cursor: pointer;position: relative; opacity: .7;" onclick="notes()">
+        <i class="fa-regular fa-file-lines"></i>
+        الملاحظات
+      </div>
+    </div>
+</body>
+
+<script src="main.logic.js"></script>
+
+    <script>
+        
+        const nullTaskToken = JSON.parse(localStorage.getItem('nullTaskToken') || "[]")
+        const doneTaskToken = JSON.parse(localStorage.getItem('doneTaskToken') || "[]")
+        const taskContainer = document.getElementById('task-container');
+    
+        function addTask(){
+            
+            const taskMessage = document.getElementById('title-message');
+            
+            if (taskMessage.value) {
+        
+                let taskInfo = {
+                    title: taskMessage.value,
+                    is_done: false,
+                };
+
+                nullTaskToken.push(taskInfo);
+                localStorage.setItem("nullTaskToken", JSON.stringify(nullTaskToken));
+                showNullTask();
+                showDoneTask();
+
+                closeModal();
+                clearModalInput(taskMessage);
+            }
+        }
+
+        function showNullTask(){
+            document.querySelectorAll('.task').forEach( task => task.remove())
+            nullTaskToken.forEach((task, index)=>{
+                let content = 
+                    `<li class="task ${task.is_done? 'done':''}">
+                        <div class="task-details">
+                            <div>${task.title}</div>
+                            ${task.is_done?`<i class="fa-regular fa-square-check" onclick="checkDoneTask(${index},'${task.title}',${task.is_done})"></i>`:`<i class="fa-regular fa-square" onclick="checkNullTask(${index},'${task.title}',${task.is_done})" ></i>`}
+                        </div>
+                    </li>`
+
+                taskContainer.innerHTML += content;
+
+            })
+        }
+        showNullTask()
+
+        
+
+        function checkNullTask(index, title, is_done){
+            let task = nullTaskToken[index];
+            task.is_done = !task.is_done
+            
+            setTimeout(()=>{
+                nullTaskToken.splice(index, 1);
+                localStorage.setItem("nullTaskToken", JSON.stringify(nullTaskToken)); 
+                showNullTask()
+                showDoneTask()
+            }, 200)
+                
+            localStorage.setItem("nullTaskToken", JSON.stringify(nullTaskToken));
+            // for trying >
+            let taskInfo = {
+                title: title,
+                is_done: is_done,
+            };
+            doneTaskToken.push(task)
+            localStorage.setItem("doneTaskToken", JSON.stringify(doneTaskToken));
+
+            let doneTaskLength = doneTaskToken.length 
+            uptadeDoneTaskLength(doneTaskLength)
+
+            function uptadeDoneTaskLength(length){
+            if(!length == 0){
+                    document.getElementById('complete-number').innerHTML = length
+            }
+            }
+
+
+            showNullTask()
+            showDoneTask()
+        }
+
+        
+
+        const doneTaskContainer = document.getElementById('doneTaskContainer');
+
+        function showDoneTask(){
+                document.querySelectorAll('.donetask').forEach( task => task.remove())
+                doneTaskToken.forEach((doneTask, index)=>{
+                    let content = 
+                            `<li class="task donetask ${doneTask.is_done? 'done':''} mt-3">
+                                <div class="task-details">
+                                    <div>${doneTask.title}</div>
+                                    ${doneTask.is_done?`<i class="fa-regular fa-square-check" onclick="checkDoneTask(${index},'${doneTask.title}',${doneTask.is_done})"></i>`:`<i class="fa-regular fa-square" onclick="checkTask(${index},'${doneTask.title}',${doneTask.is_done})"></i>`}
+                                </div>
+                            </li>`
+
+                    doneTaskContainer.innerHTML += content;
+                })
+                
+        }
+        showDoneTask()
+
+
+        
+
+        function checkDoneTask(index){
+            let task = doneTaskToken[index]
+            task.is_done = !task.is_done
+
+             setTimeout(()=>{
+                doneTaskToken.splice(index, 1);
+                localStorage.setItem("doneTaskToken", JSON.stringify(doneTaskToken));
+
+                showNullTask()
+                showDoneTask()
+            }, 100)
+
+            nullTaskToken.push(task)
+            localStorage.setItem("nullTaskToken", JSON.stringify(nullTaskToken));
+            showNullTask()
+            showDoneTask()
+            
+        }
+
+        function deleteToken(){
+            let checkdDoneTaskToken = JSON.parse(localStorage.getItem('doneTaskToken'))
+            let checkdNullTaskToken = JSON.parse(localStorage.getItem('nullTaskToken'))
+            if(checkdDoneTaskToken){
+                localStorage.removeItem("doneTaskToken")
+                location.reload()
+            }
+
+
+        }
+
+     
+        
+        
+
+
+        function closeModal() {
+            const modal = document.getElementById("new-task-modal");
+            const modalInstance = bootstrap.Modal.getInstance(modal);
+            modalInstance.hide();
+        }
+
+        function clearModalInput(title) {
+            title.value = "";
+        }
+        document.getElementById("title-message").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            addTask();
+        }
+        });
+
+    </script>
+
+
+</html>

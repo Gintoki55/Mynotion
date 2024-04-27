@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Home</title>
+   
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Cairo:wght@200..1000&family=Lato&family=Montserrat:wght@500&family=Poppins:ital,wght@0,400;0,500;1,400&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  </head>
+
+
+  <!--  read modal  -->
+<div class="modal fade" id="read-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header" style="cursor: text;">
+            <h1 class="modal-title fs-5" id="modal-title">Read Mode</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="read-mode" style="cursor: text;">
+
+        </div>
+      </div>
+  </div>
+</div>
+  <!--  // read modal // -->
+  
+  <!--  modal new note -->
+  <div class="modal fade" id="new-note-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modal-title">New Note</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">Title</label>
+            <input type="text" class="form-control" id="title-message">
+          </div>
+          <div class="mb-3">
+            <label for="message-text" class="col-form-label">Note</label>
+            <textarea class="form-control" id="note-message"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="create()"  style="background-color:  rgb(249, 162, 0); border-color:  rgb(249, 162, 0);">Create</button>
+      </div>
+    </div>
+  </div>
+</div>
+  <!-- //  modal new note // -->
+
+
+   <!--  modal Update -->
+  <div class="modal fade" id="update-modal-note" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modal-title">Update Note</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">Title</label>
+            <input type="text" class="form-control" id="title-update-message">
+          </div>
+          <div class="mb-3">
+            <label for="message-text" class="col-form-label">Note</label>
+            <textarea class="form-control" id="note-update-message"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="update()"  style="background-color:  rgb(249, 162, 0); border-color:  rgb(249, 162, 0);">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
+  <!-- //  modal Update // -->
+
+
+
+
+  <body>
+   <div class="container-fluid back-notes" style="min-height:100vh; padding-bottom:20px;">
+     <!-- navbar -->
+        <nav class="navbar bg-body-tertiary p-4 shadow-sm" id="navbar-container" style="background-color:#f5f5f5 !important;">
+            <div class="container-fluid">
+               <div>ahmed Notes</div>
+                <!-- navbar button-->
+                <div>
+                  <a class="navbar-brand">NoteBook</a>
+                   <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation" style="border: none; font-size:35px; color: rgb(249, 162, 0); vertical-align: middle;">
+                      <i class="fa-solid fa-bars-staggered"></i>
+                  </button>
+                </div> 
+               
+                 <!-- navbar offcanvas -->
+                  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                     <!-- navbar offcanvas header -->
+                    <div class="offcanvas-header" style="background-color: #f5f5f5;">
+                      <h5 class="offcanvas-title" id="offcanvasNavbarLabel" style="font-size: 25px;"> <i class="fa-solid fa-gear"></i> Settings </h5>
+                     <!-- navbar offcanvas close button -->
+                      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                      <div class="shadow-sm" style="background-color: #f5f5f5;">
+                        <p class="nav-link active" aria-current="page" style="font-size: 18px; padding-left:18px;padding-top: 20px;"> 
+                            ahmed Notes                    
+                        </p>
+                      </div>
+                      
+                     <!-- navbar offcanvas body -->
+                    <div style="width: 100%;height: 120px;padding-top: 30px; display: flex; justify-content: center;align-items: flex-start;flex-direction: column; " class="nav-item">
+                      <div class="d-flex justify-content-between align-items-center" style="font-size: 18px; width: 100%; padding:10px;">
+                          <a class="nav-link" onclick="allNotesLink()"><i class="fa-regular fa-note-sticky"></i> All Notes</a> 
+                          <span id="count-of-note-allNotes"></span>
+                      </div>
+                      <div class="d-flex justify-content-between align-items-center" style="font-size: 18px; width: 100%;padding:10px;">
+                          <a class="nav-link" onclick="historyLink()"><i class="fa-solid fa-clock-rotate-left"></i> History Notes</a> 
+                          <span id="count-of-note-history">13</span>
+                        </div>
+                    </div>
+                     <!-- // navbar offcanvas body // -->
+                  </div>
+                   <!-- // navbar offcanvas// -->
+                               
+                <!-- //navbar button //-->
+            </div>
+             <!--// container navabr // -->
+        </nav>
+     <!--// navbar// -->
+
+    <!-- notes -->
+        <div class="wrapper" id="note-container">
+          <div class="add-box" id="add-box" data-bs-toggle="modal" data-bs-target="#new-note-modal">
+            <div class="icon"><i class="fa-solid fa-plus"></i></div> 
+            <p>add new note</p>
+          </div>
+
+          <div class="words-note-container">
+            <div style="position: absolute;left: 50px;top:90px; width:400px; height:500px; display: flex; justify-content: center;align-items: center; flex-direction: column;" class="words-of-notes-container">
+              <img style="width: 40px; padding-bottom: 10px;opacity: 0.5" src="./images/notebook.png">
+              <p style="padding-bottom: 13px;">مامن ملاحظات</p>
+
+              <p>ستظهر هنا الملاحظات التي تضيفها هنا</p>
+            </div>
+          </div>
+        </div>
+    <!-- //notes//  -->
+
+    <div class="shadow footer" style="display: flex; justify-content: space-around; align-items: center; width: 100%; height: 80px; background-color: #f5f5f5;position: fixed; z-index: 9999;bottom:0px; border-top: 1px solid #fff;">
+      <div class="hover-footer" style="display: flex; flex-direction: column; align-items: center; font-size: 20px;width: 50%;cursor: pointer;position: relative;opacity: .7;" onclick="toDoList()">
+        <i class="fa-regular fa-square-check"></i>
+        المهام
+      </div>
+      <div class="hover-footer" style="display: flex; flex-direction: column; align-items: center;font-size: 20px;width: 50%;cursor: pointer;position: relative;" onclick="notes()">
+        <i class="fa-regular fa-file-lines"></i>
+        الملاحظات
+      </div>
+    </div>
+   </div>
+   
+  </body>
+    <script src="main.logic.js"></script>
+  <script src="script.js"></script>
+</html>
